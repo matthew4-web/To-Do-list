@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TO-DO LIST</title>
+  <link rel="stylesheet" href="Style.css">
+  <script defer>
+    // Load members from localStorage
+    let members = JSON.parse(localStorage.getItem("members")) || [];
+    let editIndex = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      displayMembers();
+    });
+
+    function openModal(index = null) {
+      document.getElementById("overlay").style.display = "block";
+      document.getElementById("memberModal").style.display = "block";
+
+      if (index !== null) {
+        const member = members[index];
+        document.getElementById("name").value = member.name;
+        document.getElementById("email").value = member.email;
+        document.getElementById("number").value = member.number;
+        editIndex = index;
+      } else {
+        document.getElementById("name").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("number").value = "";
+        editIndex = null;
+      }
+    }
+
+    function closeModal() {
+      document.getElementById("overlay").style.display = "none";
+      document.getElementById("memberModal").style.display = "none";
+    }
+
+    function addMember() {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const number = document.getElementById("number").value.trim();
+
+      if (!name || !email || !number) {
+        alert("All fields are required.");
+        return;
+      }
+
+      const member = { name, email, number };
+
+      if (editIndex !== null) {
+        members[editIndex] = member;
+      } else {
+        members.push(member);
+      }
+
+      localStorage.setItem("members", JSON.stringify(members));
+      displayMembers();
+      closeModal();
+    }
+
+    function deleteMember(index) {
+      if (confirm("Are you sure you want to delete this member?")) {
+        members.splice(index, 1);
+        localStorage.setItem("members", JSON.stringify(members));
+        displayMembers();
+      }
+    }
+
+    function displayMembers() {
+      const memberList = document.getElementById("memberList");
+      memberList.innerHTML = "";
+
+      members.forEach((member, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${member.name}</td>
+          <td>${member.email}</td>
+          <td>${member.number}</td>
+          <td>
+            <button onclick="openModal(${index})">Edit</button>
+            <button onclick="deleteMember(${index})">Delete</button>
+          </td>
+        `;
+        memberList.appendChild(row);
+      });
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="logo">Members</div>
+    <nav>
+      <div class="navbar">
+        <ul>
+          <li><a href="">FAQ</a></li>
+          <li><a href="">ABOUT US</a></li>
+          <li><a href="">CONTACT US</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <input type="text" placeholder='"Search Member"' />
+    <select>
+      <option>Filter</option>
+    </select>
+    <button>Search</button>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="content">
+    <h2>Members</h2>
+    <button onclick="openModal()">Add Member</button>
+    <table border="1" cellpadding="10" cellspacing="0" style="width:100%; margin-top: 20px; text-align: center;">
+      <thead style="background-color: #f0f0f0;">
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Number</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="memberList">
+        <!-- Dynamic member rows will be inserted here -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="icon"><button onclick="window.location.href='homepage.html'">Home</button></div>
+    <div class="icon"><button onclick="window.location.href='dashboard.html'">Dashboard</button></div>
+    <div class="icon"><button onclick="window.location.href='members.html'">Members</button></div>
+    <div class="icon"><button>Activity</button></div>
+    <div class="icon"><button>Settings</button></div>
+    <div class="icon"><button onclick="window.location.href='login.html'">Logout</button></div>
+  </div>
+
+  <!-- Modal for Add Member -->
+  <div class="overlay" id="overlay" style="display:none;"></div>
+  <div class="modal" id="memberModal" style="display:none;">
+    <h3>Add Member</h3>
+    <input type="text" id="name" placeholder="Name">
+    <input type="email" id="email" placeholder="Email">
+    <input type="text" id="number" placeholder="Number">
+    <button onclick="addMember()">Save</button>
+    <button onclick="closeModal()">Cancel</button>
+  </div>
+
+</body>
+</html>
