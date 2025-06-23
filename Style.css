@@ -6,7 +6,7 @@
 
 body {
   font-family: Arial, sans-serif;
-  background: url(hehehe.png);
+  background: url(images/hehehe.png);
 }
 
 .content {
@@ -181,7 +181,7 @@ button:hover {
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('fon2.png') no-repeat center center fixed;
+  background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url(images/fon2.png);
   background-size: cover;
   color: #333;
 }
@@ -343,4 +343,3 @@ thead {
   font-size: 16px;
   line-height: 1.6;
 }
-
